@@ -45,6 +45,7 @@ interface StatCardProps {
 	value: number;
 	subtitle?: string;
 	color?: "primary" | "info" | "warning" | "error" | "secondary";
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	icon: React.ComponentType<{ sx?: any }>;
 }
 
@@ -358,41 +359,6 @@ const OverviewView: React.FC<OverviewViewProps> = ({
 					</Card>
 				</Box>
 			)}
-
-			{/* TypeScript + Cosmos DB Integration Guide */}
-			<Card sx={{ mt: 3, bgcolor: "info.50" }}>
-				<CardContent>
-					<Typography variant="h6" color="info.main" gutterBottom>
-						🚀 TypeScript + Azure Cosmos DB Ready!
-					</Typography>
-					<Typography variant="body2" color="info.main" paragraph>
-						Your app is now fully typed with TypeScript and ready for Cosmos DB
-						integration:
-					</Typography>
-					<Box component="ul" sx={{ color: "info.main", pl: 2, m: 0 }}>
-						<Typography component="li" variant="body2">
-							<strong>Type Safety:</strong> Complete TypeScript interfaces for
-							all data structures
-						</Typography>
-						<Typography component="li" variant="body2">
-							<strong>Service Layer:</strong> Clean DataService class in{" "}
-							<code>src/services/DataService.ts</code>
-						</Typography>
-						<Typography component="li" variant="body2">
-							<strong>Easy Migration:</strong> Replace localStorage with Cosmos
-							DB API calls
-						</Typography>
-						<Typography component="li" variant="body2">
-							<strong>Error Handling:</strong> Proper async/await with try-catch
-							blocks
-						</Typography>
-						<Typography component="li" variant="body2">
-							<strong>Production Ready:</strong> Loading states, error handling,
-							and form validation
-						</Typography>
-					</Box>
-				</CardContent>
-			</Card>
 		</Box>
 	);
 };
