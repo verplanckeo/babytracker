@@ -51,8 +51,6 @@ interface StatCardProps {
 
 const OverviewView: React.FC<OverviewViewProps> = ({
 	entries,
-	onUpdateEntry,
-	onDeleteEntry,
 	loading = false,
 }) => {
 	const getAvailableDates = (): string[] => {
