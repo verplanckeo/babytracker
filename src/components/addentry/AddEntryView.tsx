@@ -105,7 +105,7 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
 		} catch (error) {
 			setSnackbar({
 				open: true,
-				message: "Failed to save entry. Please try again.",
+				message: "Failed to save entry. Please try again." + error,
 				severity: "error",
 			});
 		} finally {

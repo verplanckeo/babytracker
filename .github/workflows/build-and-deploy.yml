@@ -1,0 +1,37 @@
+name: Custom docker deployment CI/CD
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
+
+jobs:
+  build_and_deploy_job:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    runs-on: ubuntu-latest
+    name: Build and Deploy Job
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: true
+          lfs: false
+
+      # Step to set up Node.js and install dependencies
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22" # Adjust to your desired version of Node.js
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build and publish latest version
+        run: npm run publish
+
+      # Step to build the app
+      - name: Build the app
+        run: npm run build

@@ -6,6 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "docker-build": "docker build -t babytracker:latest -t itigaidev.azurecr.io/babytracker:latest .",
+    "docker-push": "docker push itigaidev.azurecr.io/babytracker:latest",
+    "docker-run": "docker run -p 8080:80 babytracker",
+    "publish": "npm run build && npm run docker-build && npm run docker-push",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
