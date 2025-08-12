@@ -29,6 +29,14 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # Log in to Azure Container Registry
+      - name: Log in to Azure Container Registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: itigaidev.azurecr.io
+          username: ${{ secrets.AZURE_ACR_USERNAME }}
+          password: ${{ secrets.AZURE_ACR_PASSWORD }}
+
       - name: Build and publish latest version
         run: npm run publish
 
