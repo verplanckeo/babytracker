@@ -32,6 +32,7 @@ jobs:
       - name: Build and publish latest version
         run: npm run publish
 
-      # Step to build the app
-      - name: Build the app
-        run: npm run build
+      - name: Deployment summary
+        run: |
+          echo "## 🚀 Deployment Successful" >> $GITHUB_STEP_SUMMARY
+          echo "You can now access the latest version here: [https://babytracker.itigai.com](babytracker)" >> $GITHUB_STEP_SUMMARY
