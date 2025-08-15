@@ -1,23 +1,30 @@
 // src/services/DataService.ts
 // src/services/DataService.ts
 import type { BabyEntry, NewBabyEntry } from '../interfaces'
+import { LogError } from './logging.service';
 
+const STORAGE_KEY: string = 'babyEntries'
 class DataService {
-  private readonly storageKey = 'babyEntries'
 
   // Load all entries
   async loadEntries(): Promise<BabyEntry[]> {
     try {
       // For localStorage implementation
-      const savedEntries = localStorage.getItem(this.storageKey)
-      return savedEntries ? JSON.parse(savedEntries) : []
+
+      return new Promise<BabyEntry[]>((resolve) => {
+        setTimeout(() => {
+          const savedEntries = localStorage.getItem(STORAGE_KEY)
+          resolve(savedEntries ? JSON.parse(savedEntries) : [])
+        }, 1500);
+      }); 
       
       // For Cosmos DB implementation (replace the above with):
       // const response = await fetch('/api/entries')
       // if (!response.ok) throw new Error('Failed to load entries')
       // return await response.json()
     } catch (error) {
-      console.error('Error loading entries:', error)
+      LogError("Error loading entries:", error);
+      //console.error('Error loading entries:', error);
       return []
     }
   }
@@ -34,7 +41,7 @@ class DataService {
       // For localStorage implementation
       const existingEntries = await this.loadEntries()
       const updatedEntries = [...existingEntries, entryWithMetadata]
-      localStorage.setItem(this.storageKey, JSON.stringify(updatedEntries))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedEntries))
       return entryWithMetadata
 
       // For Cosmos DB implementation (replace the above with):
@@ -71,7 +78,7 @@ class DataService {
       const updatedEntries = [...entries]
       updatedEntries[entryIndex] = updatedEntry
       
-      localStorage.setItem(this.storageKey, JSON.stringify(updatedEntries))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updatedEntries))
       return updatedEntry
 
       // For Cosmos DB implementation (replace the above with):
@@ -99,7 +106,7 @@ class DataService {
         throw new Error('Entry not found')
       }
 
-      localStorage.setItem(this.storageKey, JSON.stringify(filteredEntries))
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(filteredEntries))
       return true
 
       // For Cosmos DB implementation (replace the above with):

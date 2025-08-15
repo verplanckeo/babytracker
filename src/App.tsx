@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Container,
 	AppBar,
@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { Add, Assessment, ChildCare } from "@mui/icons-material";
 import type { BabyEntry, NewBabyEntry } from "./interfaces";
+import { useAsync } from "./hooks/use-async";
 import { dataService } from "./services/data.service";
 import OverviewView from "./components/overview/OverView";
 import AddEntryView from "./components/addentry/AddEntryView";
@@ -19,36 +20,32 @@ import AddEntryView from "./components/addentry/AddEntryView";
 function App() {
 	const [entries, setEntries] = useState<BabyEntry[]>([]);
 	const [currentView, setCurrentView] = useState<number>(0); // 0 = add, 1 = overview
-	const [loading, setLoading] = useState<boolean>(true);
-	const [error, setError] = useState<string | null>(null);
+	// keep a separate error state for mutations (saving/updating/deleting)
+	const [mutationError, setMutationError] = useState<string | null>(null);
 
-	// Load data on component mount
+	// Load data with the hook
+	const {
+		loading: loadingEntries,
+		error: loadError,
+		data: loadedEntries,
+	} = useAsync<BabyEntry[]>(dataService.loadEntries, []);
+
+	// When the hook returns data, sync it into local state so
+	// add/update/delete can optimistically update `entries`
 	useEffect(() => {
-		const loadData = async (): Promise<void> => {
-			try {
-				setLoading(true);
-				const loadedEntries = await dataService.loadEntries();
-				setEntries(loadedEntries);
-				setError(null);
-			} catch (err) {
-				setError("Failed to load data. Please try again.");
-				console.error("Error loading data:", err);
-			} finally {
-				setLoading(false);
-			}
-		};
-
-		loadData();
-	}, []);
+		if (loadedEntries) {
+			setEntries(loadedEntries);
+		}
+	}, [loadedEntries]);
 
 	const addEntry = async (newEntry: NewBabyEntry): Promise<BabyEntry> => {
 		try {
-			setError(null);
+			setMutationError(null);
 			const savedEntry = await dataService.saveEntry(newEntry);
 			setEntries((prev) => [...prev, savedEntry]);
 			return savedEntry;
 		} catch (err) {
-			setError("Failed to save entry. Please try again.");
+			setMutationError("Failed to save entry. Please try again.");
 			console.error("Error adding entry:", err);
 			throw err;
 		}
@@ -59,14 +56,14 @@ function App() {
 		updatedData: Partial<NewBabyEntry>
 	): Promise<BabyEntry> => {
 		try {
-			setError(null);
+			setMutationError(null);
 			const updatedEntry = await dataService.updateEntry(entryId, updatedData);
 			setEntries((prev) =>
 				prev.map((entry) => (entry.id === entryId ? updatedEntry : entry))
 			);
 			return updatedEntry;
 		} catch (err) {
-			setError("Failed to update entry. Please try again.");
+			setMutationError("Failed to update entry. Please try again.");
 			console.error("Error updating entry:", err);
 			throw err;
 		}
@@ -74,11 +71,11 @@ function App() {
 
 	const deleteEntry = async (entryId: string): Promise<void> => {
 		try {
-			setError(null);
+			setMutationError(null);
 			await dataService.deleteEntry(entryId);
 			setEntries((prev) => prev.filter((entry) => entry.id !== entryId));
 		} catch (err) {
-			setError("Failed to delete entry. Please try again.");
+			setMutationError("Failed to delete entry. Please try again.");
 			console.error("Error deleting entry:", err);
 			throw err;
 		}
@@ -92,10 +89,12 @@ function App() {
 	};
 
 	const handleCloseError = (): void => {
-		setError(null);
+		// close either mutation or load errors
+		setMutationError(null);
+		// loadError comes from the hook; to clear it you’d typically re-run the hook (see tip below)
 	};
 
-	if (loading) {
+	if (loadingEntries) {
 		return (
 			<Box
 				sx={{
@@ -113,6 +112,9 @@ function App() {
 		);
 	}
 
+	const combinedError =
+		mutationError || (loadError ? (loadError as Error).message : null);
+
 	return (
 		<Box sx={{ pb: 7 }}>
 			<AppBar position="static" elevation={0}>
@@ -124,24 +126,24 @@ function App() {
 				</Toolbar>
 			</AppBar>
 
-			{error && (
+			{combinedError && (
 				<Container maxWidth="md" sx={{ mt: 2 }}>
 					<Alert severity="error" onClose={handleCloseError}>
-						{error}
+						{combinedError}
 					</Alert>
 				</Container>
 			)}
 
 			<Container maxWidth="md" sx={{ mt: 2, mb: 2 }}>
 				{currentView === 0 && (
-					<AddEntryView onAddEntry={addEntry} loading={loading} />
+					<AddEntryView onAddEntry={addEntry} loading={loadingEntries} />
 				)}
 				{currentView === 1 && (
 					<OverviewView
 						entries={entries}
 						onUpdateEntry={updateEntry}
 						onDeleteEntry={deleteEntry}
-						loading={loading}
+						loading={loadingEntries}
 					/>
 				)}
 			</Container>
