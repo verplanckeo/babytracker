@@ -17,6 +17,9 @@ jobs:
       REGISTRY: itigaidev.azurecr.io
       IMAGE_NAME: babytracker-api
     name: Build and Deploy Job
+    defaults:
+      run:
+        working-directory: api
     
     steps:
       - uses: actions/checkout@v4
