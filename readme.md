@@ -1,0 +1,1 @@
+[![API CI/CD](https://github.com/verplanckeo/babytracker/actions/workflows/build-and-deploy-api.yml/badge.svg)](https://github.com/verplanckeo/babytracker/actions/workflows/build-and-deploy-api.yml)
