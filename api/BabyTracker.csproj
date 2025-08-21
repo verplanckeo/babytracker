@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>aspnet-babytracker-b04ac5aa-8356-4368-ad88-e66694b045c0</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <LangVersion>12</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="HotChocolate" Version="15.1.8" />
+        <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.8" />
+        <PackageReference Include="HotChocolate.AspNetCore.Authorization" Version="15.1.8" />
+        <PackageReference Include="HotChocolate.Authorization" Version="15.1.8" />
+        <PackageReference Include="HotChocolate.Data" Version="15.1.8" />
+        <PackageReference Include="HotChocolate.Execution.Projections" Version="15.1.8" />
+        <PackageReference Include="HotChocolate.OpenApi" Version="15.1.8" />
+        <PackageReference Include="HotChocolate.Stitching" Version="13.9.14" />
+        <PackageReference Include="HotChocolate.Types.Filters" Version="13.9.14" />
+        <PackageReference Include="HotChocolate.Types.Sorting" Version="13.9.14" />
+        <PackageReference Include="HotChocolate.Utilities.DependencyInjection" Version="15.1.8" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.8" NoWarn="NU1605" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="9.0.8" NoWarn="NU1605" />
+        <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="9.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.8" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.8" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.8" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.8">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
+        <PackageReference Include="Microsoft.Identity.Web" Version="3.13.1" />
+        <PackageReference Include="Microsoft.Identity.Web.DownstreamApi" Version="3.13.1" />
+        <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.14.0" />
+        <PackageReference Include="Scalar.AspNetCore" Version="2.6.9" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="Database\migrations\" />
+    </ItemGroup>
+
+</Project>

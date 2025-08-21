@@ -1,0 +1,7 @@
+﻿services:
+  babytracker:
+    image: babytracker
+    build:
+      context: .
+      dockerfile: Dockerfile
+

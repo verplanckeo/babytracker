@@ -43,4 +43,4 @@ jobs:
       - name: Deployment summary
         run: |
           echo "## 🚀 Deployment Successful" >> $GITHUB_STEP_SUMMARY
-          echo "You can now access the latest version here: [https://babytracker.itigai.com](babytracker)" >> $GITHUB_STEP_SUMMARY
+          echo "You can now access the latest version here: [babytracker](https://babytracker.itigai.com)" >> $GITHUB_STEP_SUMMARY
