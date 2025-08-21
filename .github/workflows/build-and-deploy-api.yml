@@ -1,4 +1,4 @@
-name: Docker API deployment CI/CD
+name: Docker Backend deployment CI/CD
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
 
 jobs:
   build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action == 'closed')
     runs-on: ubuntu-latest
     env:
       REGISTRY: itigaidev.azurecr.io
@@ -46,11 +46,3 @@ jobs:
           echo "## 🚀 Deployment Successful" >> $GITHUB_STEP_SUMMARY
           echo "You can now access the latest version here: [babytracker](https://babytracker.itigai.com)" >> $GITHUB_STEP_SUMMARY
           echo "You can now access the latest version here: [babytracker - api](https://babytrackerapi.itigai.com/graphql)" >> $GITHUB_STEP_SUMMARY
-          
-  close_pull_request_job:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    runs-on: ubuntu-latest
-    name: Close Pull Request Job
-    steps:
-      - name: Close Pull Request
-        run: echo "Pull request closed - no deployment needed"

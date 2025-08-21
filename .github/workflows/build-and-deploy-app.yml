@@ -1,4 +1,4 @@
-name: Custom docker deployment CI/CD
+name: Docker Frontend deployment CI/CD
 
 on:
   push:
@@ -40,7 +40,7 @@ jobs:
         run: echo "## ✅ PR build completed (no publish)" >> $GITHUB_STEP_SUMMARY
         
   build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action == 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
     defaults:
