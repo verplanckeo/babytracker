@@ -1,53 +1,103 @@
-name: Docker API deployment CI/CD
+name: Docker Backend deployment CI/CD
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
+    paths: [ 'api/**' ]
   pull_request:
     types: [opened, synchronize, reopened, closed]
-    branches:
-      - main
+    branches: [ main ]
+    paths: [ 'api/**' ]
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  REGISTRY_LOGIN_SERVER: itigaidev.azurecr.io
+  REGISTRY_USERNAME: ${{ secrets.AZURE_ACR_USERNAME }}
+  REGISTRY_PASSWORD: ${{ secrets.AZURE_ACR_PASSWORD }}
+  IMAGE_NAME: babytracker-api
 
 jobs:
-  build_and_deploy_job:
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+  build_and_deploy:
+    # run on push, or when a PR to main is CLOSED *and merged*
+    if: |
+      github.event_name == 'push' ||
+      (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
-    env:
-      REGISTRY: itigaidev.azurecr.io
-      IMAGE_NAME: babytracker-api
-    name: Build and Deploy Job
-    
+    name: Build & Push to ACR
+    defaults:
+      run:
+        working-directory: api
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          lfs: false
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Azure Container Registry
+        uses: azure/docker-login@v1
+        with:
+          login-server: ${{ env.REGISTRY_LOGIN_SERVER }}
+          username: ${{ env.REGISTRY_USERNAME }}
+          password: ${{ env.REGISTRY_PASSWORD }}
+
+      - name: Extract Docker metadata (tags, labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest
+            type=raw,value=${{ github.run_number }}
+            type=raw,value=sha-${{ github.sha }}
+
+      - name: Build and push
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: ./api
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:buildcache
+          cache-to: type=registry,ref=${{ env.REGISTRY_LOGIN_SERVER }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
+
+      - name: Deployment summary
+        run: |
+          echo "## 🚀 Image pushed to ACR" >> $GITHUB_STEP_SUMMARY
+          echo "- **Registry**: \`${{ env.REGISTRY_LOGIN_SERVER }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Repository**: \`${{ env.IMAGE_NAME }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Tags**: \`latest\`, \`${{ github.run_number }}\`, \`sha-${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "You can now access the latest version here:" >> $GITHUB_STEP_SUMMARY
+          echo "- [babytracker](https://babytracker.itigai.com)" >> $GITHUB_STEP_SUMMARY
+          echo "- [babytracker - api](https://babytrackerapi.itigai.com/graphql)" >> $GITHUB_STEP_SUMMARY
+
+  # Build on PRs (not closed) without pushing, to validate Dockerfile
+  pr_build_only:
+    if: github.event_name == 'pull_request' && github.event.action != 'closed'
+    runs-on: ubuntu-latest
+    name: PR Build (no push)
+    defaults:
+      run:
+        working-directory: api
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
           lfs: false
-
-      # Log in to Azure Container Registry
-      - name: Log in to Azure Container Registry
-        uses: azure/docker-login@v1
+      - uses: docker/setup-buildx-action@v3
+      - name: Test build (no push)
+        uses: docker/build-push-action@v6
         with:
-          login-server: itigaidev.azurecr.io
-          username: ${{ secrets.AZURE_ACR_USERNAME }}
-          password: ${{ secrets.AZURE_ACR_PASSWORD }}
-            
-      # Build and push Docker image
-      - name: Build and push Docker image
-        run: |
-          # Build the Docker image
-          docker build -t itigaidev.azurecr.io/babytracker-api:${{ github.run_number }} -t itigaidev.azurecr.io/babytracker-api:latest .
-
-      - name: Deployment summary
-        run: |
-          echo "## 🚀 Deployment Successful" >> $GITHUB_STEP_SUMMARY
-          echo "You can now access the latest version here: [babytracker](https://babytracker.itigai.com)" >> $GITHUB_STEP_SUMMARY
-          echo "You can now access the latest version here: [babytracker - api](https://babytrackerapi.itigai.com/graphql)" >> $GITHUB_STEP_SUMMARY
-          
-  close_pull_request_job:
-    if: github.event_name == 'pull_request' && github.event.action == 'closed'
-    runs-on: ubuntu-latest
-    name: Close Pull Request Job
-    steps:
-      - name: Close Pull Request
-        run: echo "Pull request closed - no deployment needed"
+          context: ./api
+          push: false
+          load: false
