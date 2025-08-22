@@ -31,6 +31,7 @@ jobs:
     # run on push, or when a PR to main is CLOSED *and merged*
     if: |
       github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
     name: Build & Push to ACR
