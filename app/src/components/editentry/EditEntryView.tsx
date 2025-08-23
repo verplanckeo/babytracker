@@ -40,8 +40,8 @@ interface EditEntryDialogProps {
 interface EditFormData {
 	date: Dayjs;
 	time: Dayjs;
-	feedType: "bottle" | "breast";
-	startingBreast: "left" | "right";
+	feedType: "BOTTLE" | "BREAST";
+	startingBreast: "LEFT" | "RIGHT";
 	temperature: string;
 	didPee: boolean;
 	didPoo: boolean;
@@ -57,8 +57,8 @@ const EditEntryDialog: React.FC<EditEntryDialogProps> = ({
 	const [formData, setFormData] = useState<EditFormData>({
 		date: dayjs(),
 		time: dayjs(),
-		feedType: "bottle",
-		startingBreast: "left",
+		feedType: "BOTTLE",
+		startingBreast: "LEFT",
 		temperature: "",
 		didPee: false,
 		didPoo: false,
@@ -73,7 +73,7 @@ const EditEntryDialog: React.FC<EditEntryDialogProps> = ({
 				date: dayjs(entry.date),
 				time: dayjs(`2000-01-01T${entry.time}`),
 				feedType: entry.feedType,
-				startingBreast: entry.startingBreast || "left",
+				startingBreast: entry.startingBreast || "LEFT",
 				temperature: entry.temperature?.toString() || "",
 				didPee: entry.didPee,
 				didPoo: entry.didPoo,
@@ -88,7 +88,7 @@ const EditEntryDialog: React.FC<EditEntryDialogProps> = ({
 			time: formData.time.format("HH:mm"),
 			feedType: formData.feedType,
 			startingBreast:
-				formData.feedType === "breast" ? formData.startingBreast : null,
+				formData.feedType === "BREAST" ? formData.startingBreast : null,
 			temperature: formData.temperature
 				? parseFloat(formData.temperature)
 				: null,
@@ -130,13 +130,13 @@ const EditEntryDialog: React.FC<EditEntryDialogProps> = ({
 	const handleFeedTypeChange = (
 		event: React.ChangeEvent<HTMLInputElement>
 	): void => {
-		handleChange("feedType", event.target.value as "bottle" | "breast");
+		handleChange("feedType", event.target.value as "BOTTLE" | "BREAST");
 	};
 
 	const handleStartingBreastChange = (
 		event: React.ChangeEvent<HTMLInputElement>
 	): void => {
-		handleChange("startingBreast", event.target.value as "left" | "right");
+		handleChange("startingBreast", event.target.value as "LEFT" | "RIGHT");
 	};
 
 	const handleTemperatureChange = (
@@ -211,7 +211,7 @@ const EditEntryDialog: React.FC<EditEntryDialogProps> = ({
 						</RadioGroup>
 					</FormControl>
 
-					{formData.feedType === "breast" && (
+					{formData.feedType === "BREAST" && (
 						<FormControl component="fieldset" disabled={saving}>
 							<FormLabel component="legend">Starting Breast</FormLabel>
 							<RadioGroup
@@ -220,12 +220,12 @@ const EditEntryDialog: React.FC<EditEntryDialogProps> = ({
 								row
 							>
 								<FormControlLabel
-									value="left"
+									value="LEFT"
 									control={<Radio />}
 									label="Left"
 								/>
 								<FormControlLabel
-									value="right"
+									value="RIGHT"
 									control={<Radio />}
 									label="Right"
 								/>

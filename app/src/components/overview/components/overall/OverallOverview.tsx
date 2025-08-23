@@ -46,13 +46,13 @@ const OverallOverview: React.FC<OverallOverviewProps> = ({
 
 		return {
 			totalFeedings: dayEntries.length,
-			bottleFeeds: dayEntries.filter((e) => e.feedType === "bottle").length,
-			breastFeeds: dayEntries.filter((e) => e.feedType === "breast").length,
+			bottleFeeds: dayEntries.filter((e) => e.feedType === "BOTTLE").length,
+			breastFeeds: dayEntries.filter((e) => e.feedType === "BREAST").length,
 			leftBreastFeeds: dayEntries.filter(
-				(e) => e.feedType === "breast" && e.startingBreast === "left"
+				(e) => e.feedType === "BREAST" && e.startingBreast === "LEFT"
 			).length,
 			rightBreastFeeds: dayEntries.filter(
-				(e) => e.feedType === "breast" && e.startingBreast === "right"
+				(e) => e.feedType === "BREAST" && e.startingBreast === "RIGHT"
 			).length,
 			totalPees: dayEntries.filter((e) => e.didPee).length,
 			totalPoos: dayEntries.filter((e) => e.didPoo).length,
@@ -79,13 +79,13 @@ const OverallOverview: React.FC<OverallOverviewProps> = ({
 
 		const totalDays = availableDates.length;
 		const totalFeedings = entries.length;
-		const bottleFeeds = entries.filter((e) => e.feedType === "bottle").length;
-		const breastFeeds = entries.filter((e) => e.feedType === "breast").length;
+		const bottleFeeds = entries.filter((e) => e.feedType === "BOTTLE").length;
+		const breastFeeds = entries.filter((e) => e.feedType === "BREAST").length;
 		const leftBreastFeeds = entries.filter(
-			(e) => e.feedType === "breast" && e.startingBreast === "left"
+			(e) => e.feedType === "BREAST" && e.startingBreast === "LEFT"
 		).length;
 		const rightBreastFeeds = entries.filter(
-			(e) => e.feedType === "breast" && e.startingBreast === "right"
+			(e) => e.feedType === "BREAST" && e.startingBreast === "RIGHT"
 		).length;
 		const totalPees = entries.filter((e) => e.didPee).length;
 		const totalPoos = entries.filter((e) => e.didPoo).length;

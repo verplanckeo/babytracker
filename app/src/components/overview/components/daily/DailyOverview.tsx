@@ -55,13 +55,13 @@ const DailyOverview: React.FC<DailyOverviewProps> = ({ entries, loading }) => {
 
 		return {
 			totalFeedings: dayEntries.length,
-			bottleFeeds: dayEntries.filter((e) => e.feedType === "bottle").length,
-			breastFeeds: dayEntries.filter((e) => e.feedType === "breast").length,
+			bottleFeeds: dayEntries.filter((e) => e.feedType === "BOTTLE").length,
+			breastFeeds: dayEntries.filter((e) => e.feedType === "BREAST").length,
 			leftBreastFeeds: dayEntries.filter(
-				(e) => e.feedType === "breast" && e.startingBreast === "left"
+				(e) => e.feedType === "BREAST" && e.startingBreast === "LEFT"
 			).length,
 			rightBreastFeeds: dayEntries.filter(
-				(e) => e.feedType === "breast" && e.startingBreast === "right"
+				(e) => e.feedType === "BREAST" && e.startingBreast === "RIGHT"
 			).length,
 			totalPees: dayEntries.filter((e) => e.didPee).length,
 			totalPoos: dayEntries.filter((e) => e.didPoo).length,
@@ -240,7 +240,7 @@ const DailyOverview: React.FC<DailyOverviewProps> = ({ entries, loading }) => {
 															flexWrap: "wrap",
 														}}
 													>
-														{entry.feedType === "bottle" ? (
+														{entry.feedType === "BOTTLE" ? (
 															<Chip
 																icon={<LocalDrink />}
 																label="Bottle"
