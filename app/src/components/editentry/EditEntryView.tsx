@@ -194,7 +194,7 @@ const EditEntryDialog: React.FC<EditEntryDialogProps> = ({
 							row
 						>
 							<FormControlLabel
-								value="bottle"
+								value="BOTTLE"
 								control={<Radio />}
 								label={
 									<Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -204,7 +204,7 @@ const EditEntryDialog: React.FC<EditEntryDialogProps> = ({
 								}
 							/>
 							<FormControlLabel
-								value="breast"
+								value="BREAST"
 								control={<Radio />}
 								label="Breast"
 							/>

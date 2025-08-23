@@ -17,6 +17,7 @@ import {
 	Divider,
 	Paper,
 	type SelectChangeEvent,
+	IconButton,
 } from "@mui/material";
 import {
 	LocalDrink,
@@ -25,6 +26,7 @@ import {
 	Cake,
 	Warning,
 	Timeline,
+	Delete,
 } from "@mui/icons-material";
 import dayjs from "dayjs";
 import type { BabyEntry, DayStats } from "../../../../interfaces";
@@ -33,9 +35,14 @@ import StatCard from "../statcard/StatCard";
 interface DailyOverviewProps {
 	entries: BabyEntry[];
 	loading: boolean;
+	onDeleteEntry?: (entryId: string) => Promise<void>;
 }
 
-const DailyOverview: React.FC<DailyOverviewProps> = ({ entries, loading }) => {
+const DailyOverview: React.FC<DailyOverviewProps> = ({
+	entries,
+	loading,
+	onDeleteEntry,
+}) => {
 	const getAvailableDates = (): string[] => {
 		const dates = [...new Set(entries.map((entry) => entry.date))];
 		return dates.sort().reverse();
@@ -48,6 +55,12 @@ const DailyOverview: React.FC<DailyOverviewProps> = ({ entries, loading }) => {
 
 	const handleDateChange = (event: SelectChangeEvent<string>): void => {
 		setSelectedDate(event.target.value);
+	};
+
+	const handleDeleteEntry = async (entryId: string): Promise<void> => {
+		if (onDeleteEntry) {
+			await onDeleteEntry(entryId);
+		}
 	};
 
 	const getDateStats = (date: string): DayStats => {
@@ -296,6 +309,25 @@ const DailyOverview: React.FC<DailyOverviewProps> = ({ entries, loading }) => {
 													</Box>
 												}
 											/>
+											{onDeleteEntry && (
+												<IconButton
+													size="small"
+													color="error"
+													onClick={() => handleDeleteEntry(entry.id)}
+													sx={{
+														ml: 1,
+														"&:hover": {
+															backgroundColor: "error.light",
+															color: "white",
+														},
+													}}
+													aria-label={`Delete entry at ${formatTime(
+														entry.time
+													)}`}
+												>
+													<Delete fontSize="small" />
+												</IconButton>
+											)}
 										</ListItem>
 										{index < dailyStats.entries.length - 1 && <Divider />}
 									</React.Fragment>

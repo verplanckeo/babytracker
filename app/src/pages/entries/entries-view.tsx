@@ -13,12 +13,14 @@ import type { BabyEntry, NewBabyEntry } from "../../interfaces";
 import { useAsync } from "../../hooks/use-async";
 import { dataService } from "../../services/data.service";
 import OverviewView from "../../components/overview/OverView";
+import { useNotification } from "../../notification/hooks/use-notification";
 
 function EntriesView() {
 	const [entries, setEntries] = useState<BabyEntry[]>([]);
 	const [currentView, setCurrentView] = useState<number>(0); // 0 = add, 1 = overview
 	// keep a separate error state for mutations (saving/updating/deleting)
 	const [mutationError, setMutationError] = useState<string | null>(null);
+	const { showSuccess, showError } = useNotification();
 
 	// Load data with the hook
 	const {
@@ -58,9 +60,11 @@ function EntriesView() {
 			setMutationError(null);
 			await dataService.deleteEntry(entryId);
 			setEntries((prev) => prev.filter((entry) => entry.id !== entryId));
+			showSuccess("Entry removed successfully.");
 		} catch (err) {
 			setMutationError("Failed to delete entry. Please try again.");
 			console.error("Error deleting entry:", err);
+			showError("Failed to delete entry. Please try again.");
 			throw err;
 		}
 	};

@@ -93,7 +93,7 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
 					didPoo: false,
 					didThrowUp: false,
 				});
-				showSuccess("Entry saved successfully!", 4000);
+				showSuccess("Entry saved successfully! 🍼", 4000);
 			} else {
 				showError(result.error || "Failed to save entry. Please try again.");
 			}
@@ -180,7 +180,7 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
 								row
 							>
 								<FormControlLabel
-									value="bottle"
+									value="BOTTLE"
 									control={<Radio />}
 									label={
 										<Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
@@ -190,7 +190,7 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
 									}
 								/>
 								<FormControlLabel
-									value="breast"
+									value="BREAST"
 									control={<Radio />}
 									label="Breast"
 								/>
@@ -209,12 +209,12 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
 									row
 								>
 									<FormControlLabel
-										value="left"
+										value="LEFT"
 										control={<Radio />}
 										label="Left"
 									/>
 									<FormControlLabel
-										value="right"
+										value="RIGHT"
 										control={<Radio />}
 										label="Right"
 									/>

@@ -24,6 +24,7 @@ interface OverviewViewProps {
 const OverviewView: React.FC<OverviewViewProps> = ({
 	entries,
 	loading = false,
+	onDeleteEntry,
 }) => {
 	const [viewMode, setViewMode] = useState<"daily" | "overall">("daily");
 
@@ -78,7 +79,11 @@ const OverviewView: React.FC<OverviewViewProps> = ({
 			</Card>
 
 			{viewMode === "daily" ? (
-				<DailyOverview entries={entries} loading={loading} />
+				<DailyOverview
+					entries={entries}
+					loading={loading}
+					onDeleteEntry={onDeleteEntry}
+				/>
 			) : (
 				<OverallOverview entries={entries} loading={loading} />
 			)}
