@@ -69,7 +69,7 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
 	const handleSubmit = async (): Promise<void> => {
 		const entry: NewBabyEntry = {
 			date: formData.date.format("YYYY-MM-DD"),
-			time: formData.time.format("HH:mm"),
+			time: formData.time.format("HH:mm:ss"),
 			feedType: formData.feedType,
 			startingBreast:
 				formData.feedType === "BREAST" ? formData.startingBreast : null,
