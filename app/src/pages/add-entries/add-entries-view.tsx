@@ -1,11 +1,5 @@
 import { useState } from "react";
-import {
-	Container,
-	Typography,
-	Box,
-	CircularProgress,
-	Alert,
-} from "@mui/material";
+import { Container, Alert } from "@mui/material";
 import type { BabyEntry, NewBabyEntry } from "../../interfaces";
 import { dataService } from "../../services/data.service";
 import AddEntryView from "../../components/addentry/AddEntryView";
@@ -37,24 +31,6 @@ function AddEntriesView() {
 		// close either mutation or load errors
 		setMutationError(null);
 	};
-
-	if (savingEntry) {
-		return (
-			<Box
-				sx={{
-					display: "flex",
-					justifyContent: "center",
-					alignItems: "center",
-					height: "100vh",
-					flexDirection: "column",
-					gap: 2,
-				}}
-			>
-				<CircularProgress />
-				<Typography>Saving baby data...</Typography>
-			</Box>
-		);
-	}
 
 	return (
 		<>
