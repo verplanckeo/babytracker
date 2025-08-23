@@ -66,7 +66,8 @@ public interface IBabyEntryService
                 DidPee = input.DidPee,
                 DidPoo = input.DidPoo,
                 DidThrowUp = input.DidThrowUp,
-                Created = DateTime.UtcNow
+                Created = DateTime.UtcNow,
+                Comment = input.Comment
             };
 
             _context.BabyEntries.Add(entry);
@@ -90,6 +91,7 @@ public interface IBabyEntryService
             if (input.DidPee != null) entry.DidPee = input.DidPee.Value;
             if (input.DidPoo != null) entry.DidPoo = input.DidPoo.Value;
             if (input.DidThrowUp != null) entry.DidThrowUp = input.DidThrowUp.Value;
+            if (!string.IsNullOrWhiteSpace(input.Comment)) entry.Comment = input.Comment;
             
             entry.UpdatedAt = DateTime.UtcNow;
 

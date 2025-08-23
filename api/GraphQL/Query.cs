@@ -84,7 +84,8 @@ public class Query
             DidPoo = entry.DidPoo,
             DidThrowUp = entry.DidThrowUp,
             Created = entry.Created,
-            UpdatedAt = entry.UpdatedAt
+            UpdatedAt = entry.UpdatedAt,
+            Comment = entry.Comment,
         };
     }
 }

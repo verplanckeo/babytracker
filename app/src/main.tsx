@@ -5,6 +5,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { StrictMode } from "react";
+import { AuthProvider } from "./auth/auth.provider";
+import { BrowserRouter } from "react-router-dom";
 
 const theme = createTheme({
 	palette: {
@@ -40,11 +42,15 @@ const root = ReactDOM.createRoot(
 
 root.render(
 	<StrictMode>
-		<ThemeProvider theme={theme}>
-			<CssBaseline />
-			<LocalizationProvider dateAdapter={AdapterDayjs}>
-				<App />
-			</LocalizationProvider>
-		</ThemeProvider>
+		<AuthProvider>
+			<BrowserRouter>
+				<ThemeProvider theme={theme}>
+					<CssBaseline />
+					<LocalizationProvider dateAdapter={AdapterDayjs}>
+						<App />
+					</LocalizationProvider>
+				</ThemeProvider>
+			</BrowserRouter>
+		</AuthProvider>
 	</StrictMode>
 );

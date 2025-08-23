@@ -30,6 +30,8 @@ public class BabyEntry
     public DateTimeOffset Created { get; set; } = DateTimeOffset.UtcNow;
         
     public DateTimeOffset? UpdatedAt { get; set; }
+    
+    public string? Comment { get; set; }
         
     // Foreign key to user (Azure Entra ID)
     [Required]

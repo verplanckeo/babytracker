@@ -37,8 +37,8 @@ interface AddEntryViewProps {
 interface FormData {
 	date: Dayjs;
 	time: Dayjs;
-	feedType: "bottle" | "breast";
-	startingBreast: "left" | "right";
+	feedType: "BOTTLE" | "BREAST";
+	startingBreast: "LEFT" | "RIGHT";
 	temperature: string;
 	didPee: boolean;
 	didPoo: boolean;
@@ -52,8 +52,8 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
 	const [formData, setFormData] = useState<FormData>({
 		date: dayjs(),
 		time: dayjs(),
-		feedType: "bottle",
-		startingBreast: "left",
+		feedType: "BOTTLE",
+		startingBreast: "LEFT",
 		temperature: "",
 		didPee: false,
 		didPoo: false,
@@ -72,7 +72,7 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
 			time: formData.time.format("HH:mm"),
 			feedType: formData.feedType,
 			startingBreast:
-				formData.feedType === "breast" ? formData.startingBreast : null,
+				formData.feedType === "BREAST" ? formData.startingBreast : null,
 			temperature: formData.temperature
 				? parseFloat(formData.temperature)
 				: null,
@@ -89,8 +89,8 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
 			setFormData({
 				date: dayjs(),
 				time: dayjs(),
-				feedType: "bottle",
-				startingBreast: "left",
+				feedType: "BOTTLE",
+				startingBreast: "LEFT",
 				temperature: "",
 				didPee: false,
 				didPoo: false,
@@ -139,13 +139,13 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
 	const handleFeedTypeChange = (
 		event: React.ChangeEvent<HTMLInputElement>
 	): void => {
-		handleChange("feedType", event.target.value as "bottle" | "breast");
+		handleChange("feedType", event.target.value as "BOTTLE" | "BREAST");
 	};
 
 	const handleStartingBreastChange = (
 		event: React.ChangeEvent<HTMLInputElement>
 	): void => {
-		handleChange("startingBreast", event.target.value as "left" | "right");
+		handleChange("startingBreast", event.target.value as "LEFT" | "RIGHT");
 	};
 
 	const handleTemperatureChange = (
@@ -210,7 +210,7 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
 							</RadioGroup>
 						</FormControl>
 
-						{formData.feedType === "breast" && (
+						{formData.feedType === "BREAST" && (
 							<FormControl
 								component="fieldset"
 								disabled={loading || submitting}

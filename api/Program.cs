@@ -1,6 +1,7 @@
 using BabyTracker;
 using BabyTracker.Database.context;
 using BabyTracker.GraphQL;
+using BabyTracker.Infra;
 using HotChocolate.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,16 +17,9 @@ builder.Services.AddAuthentication(builder.Configuration);
 
 builder.Services.AddDependencyInjectionServices();
 
-// Add GraphQL
-builder.Services
-   .AddGraphQLServer()
-   .AddAuthorization()
-   .AddQueryType<Query>()
-   .AddMutationType<Mutation>()
-   .AddProjections() // these require Hotchocolate.Data nuget package
-   .AddFiltering() // these require Hotchocolate.Data nuget package
-   .AddSorting(); // these require Hotchocolate.Data nuget package
+builder.Services.AddGraphQL(builder.Configuration);
 
+builder.Services.AddHttpResponseFormatter<StatusCodeHttpResponseFormatter>();
 
 var app = builder.Build();
 
@@ -37,16 +31,7 @@ if (app.Environment.IsDevelopment())
 
 app.ApplyAuthentication();
 
-// Configure GraphQL endpoint
-app.MapGraphQL("/graphql")
-   .WithOptions(new GraphQLServerOptions
-   {
-      Tool = { 
-         Enable = true, // Enable in both dev and prod
-         Title = "Baby Tracker GraphQL API",
-         Document = "Welcome to the Baby Tracker GraphQL API. Use the authentication button to sign in with Azure Entra ID.",
-      }
-   });
+app.ApplyGraphQL(app.Configuration);
 
 app.ApplyApiDocumentation(app.Configuration);
 

@@ -1,4 +1,6 @@
-export const msalConfig: Configuration = {
+import { LogError, LogLevel, LogWarn } from "../services/logging.service";
+
+export const msalConfig = {
 	auth: {
 		clientId: import.meta.env.VITE_CLIENT_ID as string,
 		authority: import.meta.env.VITE_AUTHORITY as string,
@@ -10,6 +12,7 @@ export const msalConfig: Configuration = {
 	},
 	system: {
 		loggerOptions: {
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			loggerCallback: (level: any, message: any, containsPii: any) => {
 				if (containsPii) return;
 				switch (level) {

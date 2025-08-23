@@ -55,6 +55,12 @@ public class Mutation
 
     private BabyEntryType MapToGraphQLType(BabyEntry entry)
     {
+        if (entry is null)
+            throw new GraphQLException(
+                ErrorBuilder.New()
+                    .SetMessage("BabyEntry not found.")
+                    .SetCode("NOT_FOUND").Build());
+        
         return new BabyEntryType
         {
             Id = entry.Id,
@@ -67,7 +73,8 @@ public class Mutation
             DidPoo = entry.DidPoo,
             DidThrowUp = entry.DidThrowUp,
             Created = entry.Created,
-            UpdatedAt = entry.UpdatedAt
+            UpdatedAt = entry.UpdatedAt,
+            Comment = entry.Comment,
         };
     }
 }

@@ -13,6 +13,8 @@ public class BabyEntryType
     public bool DidPee { get; set; }
     public bool DidPoo { get; set; }
     public bool DidThrowUp { get; set; }
+    
+    public string Comment { get; set; }
     public DateTimeOffset Created { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
 }

@@ -7,7 +7,7 @@ import {
 	ToggleButton,
 	ToggleButtonGroup,
 } from "@mui/material";
-import { Assessment, CalendarToday, BarChart } from "@mui/icons-material";
+import { CalendarToday, BarChart } from "@mui/icons-material";
 import type { BabyEntry, NewBabyEntry } from "../../interfaces";
 import DailyOverview from "./components/daily/DailyOverview";
 import OverallOverview from "./components/overall/OverallOverview";
@@ -57,13 +57,6 @@ const OverviewView: React.FC<OverviewViewProps> = ({
 		<Box>
 			<Card sx={{ mb: 3 }}>
 				<CardContent>
-					<Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
-						<Assessment color="secondary" />
-						<Typography variant="h5" component="h2">
-							Baby Overview
-						</Typography>
-					</Box>
-
 					<ToggleButtonGroup
 						value={viewMode}
 						exclusive

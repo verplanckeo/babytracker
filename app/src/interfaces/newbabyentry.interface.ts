@@ -1,8 +1,8 @@
 export interface NewBabyEntry {
   date: string
   time: string
-  feedType: 'bottle' | 'breast'
-  startingBreast?: 'left' | 'right' | null
+  feedType: 'BOTTLE' | 'BREAST'
+  startingBreast?: 'LEFT' | 'RIGHT' | null
   temperature?: number | null
   didPee: boolean
   didPoo: boolean

@@ -1,0 +1,101 @@
+schema {
+	query: Query
+	mutation: Mutation
+}
+
+type BabyEntryType {
+	id: String!
+	date: LocalDate!
+	time: LocalTime!
+	feedType: FeedTypes!
+	startingBreast: StartingBreastTypes
+	temperature: Float
+	didPee: Boolean!
+	didPoo: Boolean!
+	didThrowUp: Boolean!
+	created: DateTime!
+	updatedAt: DateTime
+}
+
+type Mutation {
+	createBabyEntry(input: NewBabyEntryInputTypeInput!): BabyEntryType!
+		@cost(weight: "10")
+	updateBabyEntry(
+		entryId: String!
+		input: UpdateBabyEntryInputTypeInput!
+	): BabyEntryType! @cost(weight: "10")
+	deleteBabyEntry(id: String!): Boolean! @cost(weight: "10")
+}
+
+type Query {
+	babyEntries: [BabyEntryType!]! @cost(weight: "10")
+	babyEntriesByDate(date: String!): [BabyEntryType!]! @cost(weight: "10")
+	babyEntriesByDateRange(
+		startDate: String!
+		endDate: String!
+	): [BabyEntryType!]! @cost(weight: "10")
+	babyEntry(id: String!): BabyEntryType @cost(weight: "10")
+}
+
+input NewBabyEntryInputTypeInput {
+	date: LocalDate!
+	time: LocalTime!
+	feedType: FeedTypes!
+	startingBreast: StartingBreastTypes
+	temperature: Float
+	didPee: Boolean!
+	didPoo: Boolean!
+	didThrowUp: Boolean!
+}
+
+input UpdateBabyEntryInputTypeInput {
+	date: String
+	time: String
+	feedType: FeedTypes
+	startingBreast: StartingBreastTypes
+	temperature: Float
+	didPee: Boolean
+	didPoo: Boolean
+	didThrowUp: Boolean
+}
+
+"Defines when a policy shall be executed."
+enum ApplyPolicy {
+	"Before the resolver was executed."
+	BEFORE_RESOLVER
+	"After the resolver was executed."
+	AFTER_RESOLVER
+	"The policy is applied in the validation step before the execution."
+	VALIDATION
+}
+
+enum FeedTypes {
+	BOTTLE
+	BREAST
+}
+
+enum StartingBreastTypes {
+	LEFT
+	RIGHT
+}
+
+"The purpose of the `cost` directive is to define a `weight` for GraphQL types, fields, and arguments. Static analysis can use these weights when calculating the overall cost of a query or response."
+directive @cost(
+	"The `weight` argument defines what value to add to the overall cost for every appearance, or possible appearance, of a type, field, argument, etc."
+	weight: String!
+) on SCALAR | OBJECT | FIELD_DEFINITION | ARGUMENT_DEFINITION | ENUM | INPUT_FIELD_DEFINITION
+
+"The `@specifiedBy` directive is used within the type system definition language to provide a URL for specifying the behavior of custom scalar definitions."
+directive @specifiedBy(
+	"The specifiedBy URL points to a human-readable specification. This field will only read a result for scalar types."
+	url: String!
+) on SCALAR
+
+"The `DateTime` scalar represents an ISO-8601 compliant date time type."
+scalar DateTime @specifiedBy(url: "https://www.graphql-scalars.com/date-time")
+
+"The `LocalDate` scalar type represents a ISO date string, represented as UTF-8 character sequences YYYY-MM-DD. The scalar follows the specification defined in RFC3339"
+scalar LocalDate
+
+"The LocalTime scalar type is a local time string (i.e., with no associated timezone) in 24-hr HH:mm:ss."
+scalar LocalTime

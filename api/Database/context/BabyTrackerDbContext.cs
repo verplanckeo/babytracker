@@ -31,7 +31,7 @@ public class BabyTrackerDbContext : DbContext
             entity.Property(e => e.StartingBreast)
                 .HasConversion<string>()
                 .HasMaxLength(10);
-
+            
             entity.HasIndex(e => new { e.UserId, e.Date });
             entity.HasIndex(e => e.UserId);
         });
