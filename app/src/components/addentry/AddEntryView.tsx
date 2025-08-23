@@ -13,8 +13,6 @@ import {
 	Checkbox,
 	Button,
 	Box,
-	Snackbar,
-	Alert,
 	InputAdornment,
 	CircularProgress,
 } from "@mui/material";
@@ -27,10 +25,13 @@ import {
 	Warning,
 } from "@mui/icons-material";
 import dayjs, { Dayjs } from "dayjs";
-import type { NewBabyEntry, BabyEntry, SnackbarState } from "../../interfaces";
+import type { NewBabyEntry, BabyEntry } from "../../interfaces";
+import { useNotification } from "../../notification/hooks/use-notification";
 
 interface AddEntryViewProps {
-	onAddEntry: (entry: NewBabyEntry) => Promise<BabyEntry>;
+	onAddEntry: (
+		entry: NewBabyEntry
+	) => Promise<{ success: boolean; entry?: BabyEntry; error?: string }>;
 	loading?: boolean;
 }
 
@@ -59,12 +60,8 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
 		didPoo: false,
 		didThrowUp: false,
 	});
-	const [snackbar, setSnackbar] = useState<SnackbarState>({
-		open: false,
-		message: "",
-		severity: "success",
-	});
 	const [submitting, setSubmitting] = useState<boolean>(false);
+	const { showSuccess, showError } = useNotification();
 
 	const handleSubmit = async (): Promise<void> => {
 		const entry: NewBabyEntry = {
@@ -83,31 +80,25 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
 
 		try {
 			setSubmitting(true);
-			await onAddEntry(entry);
-
-			// Reset form on success
-			setFormData({
-				date: dayjs(),
-				time: dayjs(),
-				feedType: "BOTTLE",
-				startingBreast: "LEFT",
-				temperature: "",
-				didPee: false,
-				didPoo: false,
-				didThrowUp: false,
-			});
-
-			setSnackbar({
-				open: true,
-				message: "Entry saved successfully!",
-				severity: "success",
-			});
+			const result = await onAddEntry(entry);
+			if (result.success) {
+				// Reset form on success
+				setFormData({
+					date: dayjs(),
+					time: dayjs(),
+					feedType: "BOTTLE",
+					startingBreast: "LEFT",
+					temperature: "",
+					didPee: false,
+					didPoo: false,
+					didThrowUp: false,
+				});
+				showSuccess("Entry saved successfully!", 4000);
+			} else {
+				showError(result.error || "Failed to save entry. Please try again.");
+			}
 		} catch (error) {
-			setSnackbar({
-				open: true,
-				message: "Failed to save entry. Please try again." + error,
-				severity: "error",
-			});
+			showError("Failed to save entry. Please try again." + error);
 		} finally {
 			setSubmitting(false);
 		}
@@ -118,10 +109,6 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
 		value: FormData[T]
 	): void => {
 		setFormData((prev) => ({ ...prev, [field]: value }));
-	};
-
-	const handleCloseSnackbar = (): void => {
-		setSnackbar((prev) => ({ ...prev, open: false }));
 	};
 
 	const handleDateChange = (value: Dayjs | null): void => {
@@ -318,20 +305,6 @@ const AddEntryView: React.FC<AddEntryViewProps> = ({
 					</Box>
 				</CardContent>
 			</Card>
-
-			<Snackbar
-				open={snackbar.open}
-				autoHideDuration={4000}
-				onClose={handleCloseSnackbar}
-			>
-				<Alert
-					severity={snackbar.severity}
-					onClose={handleCloseSnackbar}
-					variant="filled"
-				>
-					{snackbar.message}
-				</Alert>
-			</Snackbar>
 		</Box>
 	);
 };

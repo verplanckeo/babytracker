@@ -183,9 +183,10 @@ function writeToConsole(log: ILog) {
     try {
       if (log.Data instanceof Error) {
         // Print both message and stack, preserving the original stack
-        console[method](log.Data);
         if (log.Data.stack) {
           console[method]("Stack:", log.Data.stack);
+        } else {          
+          console[method](log.Data);
         }
       } else if (log.Data !== undefined) {
         console[method]("Data:", log.Data);

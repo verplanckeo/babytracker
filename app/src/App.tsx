@@ -6,6 +6,7 @@ import AuthGuard from "./auth/guard/auth-guard";
 import { EntriesPage } from "./pages/entries";
 import { AddEntriesPage } from "./pages/add-entries";
 import { Header } from "./components/header/Header";
+import NotificationContainer from "./notification/NotificationContainer";
 
 function App() {
 	return (
@@ -39,6 +40,8 @@ function App() {
 				/>
 				<Route path="*" element={<Navigate to="/login" replace />} />
 			</Routes>
+
+			<NotificationContainer />
 			<NavigationBar />
 		</>
 	);

@@ -7,6 +7,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { StrictMode } from "react";
 import { AuthProvider } from "./auth/auth.provider";
 import { BrowserRouter } from "react-router-dom";
+import { NotificationProvider } from "./notification/notification.provider";
 
 const theme = createTheme({
 	palette: {
@@ -44,12 +45,14 @@ root.render(
 	<StrictMode>
 		<AuthProvider>
 			<BrowserRouter>
-				<ThemeProvider theme={theme}>
-					<CssBaseline />
-					<LocalizationProvider dateAdapter={AdapterDayjs}>
-						<App />
-					</LocalizationProvider>
-				</ThemeProvider>
+				<NotificationProvider>
+					<ThemeProvider theme={theme}>
+						<CssBaseline />
+						<LocalizationProvider dateAdapter={AdapterDayjs}>
+							<App />
+						</LocalizationProvider>
+					</ThemeProvider>
+				</NotificationProvider>
 			</BrowserRouter>
 		</AuthProvider>
 	</StrictMode>

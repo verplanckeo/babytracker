@@ -11,10 +11,10 @@ public static class Program_GraphQL
             .AddGraphQLServer()
             .AddAuthorization()
             .AddQueryType<Query>()
-            .AddMutationType<Mutation>()
-            .AddProjections() // these require Hotchocolate.Data nuget package
-            .AddFiltering() // these require Hotchocolate.Data nuget package
-            .AddSorting(); // these require Hotchocolate.Data nuget package
+            .AddMutationType<Mutation>();
+            //.AddProjections() // these require Hotchocolate.Data nuget package
+            //.AddFiltering() // these require Hotchocolate.Data nuget package
+            //.AddSorting(); // these require Hotchocolate.Data nuget package
         
         return services;
     }

@@ -154,7 +154,7 @@ class DataService {
       // Use your axios service with optional custom scopes
       const config = customScopes ? { scopes: customScopes } : undefined;
       const response: GraphQLResponse<T> = await api.post('graphql/', requestBody, config);
-      
+
       if (response.errors && response.errors.length > 0) {
         throw new Error(`GraphQL error: ${response.errors[0].message}`);
       }
@@ -234,29 +234,11 @@ class DataService {
       );
 
       const savedEntry = this.transformGraphQLEntry(response.createBabyEntry);
-      
-      // Update localStorage cache
-      try {
-        //const existingEntries = await this.loadEntriesFromLocalStorage();
-        //const updatedEntries = [...existingEntries, savedEntry];
-        //await this.saveEntriesToLocalStorage(updatedEntries);
-      } catch (localStorageError) {
-        LogError('Failed to update localStorage cache:', localStorageError);
-      }
 
       return savedEntry;
     } catch (error) {
       LogError('Error saving entry via GraphQL:', error);
-      
-      // Fallback to localStorage
-      const entryWithMetadata: BabyEntry = {
-        ...entry,
-        id: Date.now().toString(),
-        timestamp: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
-
-      return entryWithMetadata;
+      throw error;
     }
   }
 

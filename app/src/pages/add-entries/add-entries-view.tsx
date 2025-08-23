@@ -16,16 +16,18 @@ function AddEntriesView() {
 
 	const [savingEntry, setSavingEntry] = useState<boolean>(false);
 
-	const addEntry = async (newEntry: NewBabyEntry): Promise<BabyEntry> => {
+	const addEntry = async (
+		newEntry: NewBabyEntry
+	): Promise<{ success: boolean; entry?: BabyEntry; error?: string }> => {
 		setSavingEntry(true);
 		try {
 			setMutationError(null);
 			const savedEntry = await dataService.saveEntry(newEntry);
-			return savedEntry;
-		} catch (err) {
-			setMutationError("Failed to save entry. Please try again.");
-			console.error("Error adding entry:", err);
-			throw err;
+			return { success: true, entry: savedEntry };
+		} catch {
+			const errorMessage = "Failed to save entry. Please try again.";
+			setMutationError(errorMessage);
+			return { success: false, error: errorMessage };
 		} finally {
 			setSavingEntry(false);
 		}
@@ -49,7 +51,7 @@ function AddEntriesView() {
 				}}
 			>
 				<CircularProgress />
-				<Typography>Loading baby data...</Typography>
+				<Typography>Saving baby data...</Typography>
 			</Box>
 		);
 	}

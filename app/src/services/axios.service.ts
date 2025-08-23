@@ -164,8 +164,7 @@ apiClient.interceptors.response.use(
                     return apiClient(originalRequest);
                 }
             } catch (refreshError) {
-                console.error('Token refresh failed:', refreshError);
-                throw new AuthenticationError('Session expired. Please login again.');
+                throw new AuthenticationError('Session expired. Please login again.' + refreshError);
             }
         }
     
