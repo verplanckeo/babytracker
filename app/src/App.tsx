@@ -7,6 +7,7 @@ import { EntriesPage } from "./pages/entries";
 import { AddEntriesPage } from "./pages/add-entries";
 import { Header } from "./components/header/Header";
 import NotificationContainer from "./notification/NotificationContainer";
+import { SleepPage } from "./pages/sleep";
 
 function App() {
 	return (
@@ -35,6 +36,14 @@ function App() {
 					element={
 						<AuthGuard>
 							<EntriesPage />
+						</AuthGuard>
+					}
+				/>
+				<Route
+					path="/sleep"
+					element={
+						<AuthGuard>
+							<SleepPage />
 						</AuthGuard>
 					}
 				/>

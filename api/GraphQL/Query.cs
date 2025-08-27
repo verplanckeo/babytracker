@@ -1,5 +1,6 @@
 ﻿using System.Security.Claims;
 using BabyTracker.Database.entities;
+using BabyTracker.GraphQL.services;
 using BabyTracker.GraphQL.types;
 using BabyTracker.Infra;
 using Microsoft.AspNetCore.Authorization;
@@ -86,6 +87,86 @@ public class Query
             Created = entry.Created,
             UpdatedAt = entry.UpdatedAt,
             Comment = entry.Comment,
+        };
+    }
+
+    /// <summary>
+    /// Get all sleep entries for the current user
+    /// </summary>
+    /// <returns></returns>
+    public async Task<List<SleepEntryType>> SleepEntries([Service] ISleepEntryService sleepService,
+        [Service] IUserContext userContext)
+    {
+        var userId = userContext.GetUserId();
+        var entries = await sleepService.GetSleepEntriesAsync(userId);
+        return entries.Select(MapSleepEntryToGraphQLType).ToList();
+    }
+
+    /// <summary>
+    /// Get sleep entries for a specific date
+    /// </summary>
+    /// <param name="date">Date in YYYY-MM-DD format</param>
+    /// <returns></returns>
+    public async Task<List<SleepEntryType>> SleepEntriesByDate(string date, [Service] ISleepEntryService sleepService,
+        [Service] IUserContext userContext)
+    {
+        var userId = userContext.GetUserId();
+        var entries = await sleepService.GetSleepEntriesByDateAsync(userId, date);
+        return entries.Select(MapSleepEntryToGraphQLType).ToList();
+    }
+
+    /// <summary>
+    /// Get sleep entries within a date range
+    /// </summary>
+    /// <param name="startDate">Start date in YYYY-MM-DD format</param>
+    /// <param name="endDate">End date in YYYY-MM-DD format</param>
+    /// <returns></returns>
+    public async Task<List<SleepEntryType>> SleepEntriesByDateRange(string startDate, string endDate,
+        [Service] ISleepEntryService sleepService, [Service] IUserContext userContext)
+    {
+        var userId = userContext.GetUserId();
+        var entries = await sleepService.GetSleepEntriesByDateRangeAsync(userId, startDate, endDate);
+        return entries.Select(MapSleepEntryToGraphQLType).ToList();
+    }
+
+    /// <summary>
+    /// Get the currently active sleep session
+    /// </summary>
+    /// <returns></returns>
+    public async Task<SleepEntryType?> ActiveSleep([Service] ISleepEntryService sleepService,
+        [Service] IUserContext userContext)
+    {
+        var userId = userContext.GetUserId();
+        var activeSleep = await sleepService.GetActiveSleepAsync(userId);
+        return activeSleep != null ? MapSleepEntryToGraphQLType(activeSleep) : null;
+    }
+
+    /// <summary>
+    /// Get a specific sleep entry by ID
+    /// </summary>
+    /// <param name="id">Sleep entry ID</param>
+    /// <returns></returns>
+    public async Task<SleepEntryType?> SleepEntry(string id, [Service] ISleepEntryService sleepService,
+        [Service] IUserContext userContext)
+    {
+        var userId = userContext.GetUserId();
+        var entry = await sleepService.GetSleepEntryByIdAsync(userId, id);
+        return entry != null ? MapSleepEntryToGraphQLType(entry) : null;
+    }
+
+    private static SleepEntryType MapSleepEntryToGraphQLType(SleepEntry entry)
+    {
+        return new SleepEntryType
+        {
+            Id = entry.Id,
+            Date = entry.Date,
+            StartTime = entry.StartTime,
+            EndTime = entry.EndTime,
+            Duration = entry.Duration,
+            IsActive = entry.IsActive,
+            Comment = entry.Comment,
+            Created = entry.Created,
+            UpdatedAt = entry.UpdatedAt
         };
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BabyTracker.GraphQL;
+using BabyTracker.GraphQL.services;
 using BabyTracker.Infra;
 
 namespace BabyTracker;
@@ -9,6 +10,7 @@ public static class DependencyInjectionExtensions
     {
         services.AddScoped<IUserContext, UserContext>();
         services.AddScoped<IBabyEntryService, BabyEntryService>();
+        services.AddScoped<ISleepEntryService, SleepEntryService>();
 
         services.AddScoped<Query>();
         services.AddScoped<Mutation>();

@@ -1,4 +1,4 @@
-import { Add, Assessment } from "@mui/icons-material";
+import { Add, Assessment, Bedtime } from "@mui/icons-material";
 import { BottomNavigation, BottomNavigationAction } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -17,6 +17,7 @@ export const NavigationBar: React.FC = () => {
 	const navItems: NavItem[] = [
 		{ label: "Add Entry", path: "/add", icon: <Add /> },
 		{ label: "Overview", path: "/overview", icon: <Assessment /> },
+		{ label: "Sleep", path: "/sleep", icon: <Bedtime /> },
 	];
 
 	// Update currentView based on the current pathname
