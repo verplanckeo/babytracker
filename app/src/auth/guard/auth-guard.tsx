@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 
 import { CircularProgress, Box } from "@mui/material";
-import { useMsalAuth } from "../hooks/use-msal-auth";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useMsalAuth } from "../hooks/use-msal-auth";
 
 interface ProtectedRouteProps {
 	children: React.ReactElement;

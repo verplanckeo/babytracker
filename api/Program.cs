@@ -17,6 +17,8 @@ builder.Services.AddAuthentication(builder.Configuration);
 
 builder.Services.AddDependencyInjectionServices();
 
+builder.Services.AddControllers();
+
 builder.Services.AddGraphQL(builder.Configuration);
 
 builder.Services.AddHttpResponseFormatter<StatusCodeHttpResponseFormatter>();
@@ -31,9 +33,13 @@ if (app.Environment.IsDevelopment())
 
 app.ApplyAuthentication();
 
+await app.ApplyDatabaseMigration();
+
 app.ApplyGraphQL(app.Configuration);
 
 app.ApplyApiDocumentation(app.Configuration);
+
+app.MapControllers();
 
 // Ensure database is created
 using (var scope = app.Services.CreateScope())

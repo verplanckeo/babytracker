@@ -18,7 +18,7 @@ public static class AuthenticationExtensions
       {
          options.AddPolicy("AllowFrontend", policy =>
          {
-            policy.WithOrigins(configuration.GetSection("AllowedOrigins").Get<string[]>())
+            policy.WithOrigins(configuration.GetSection("AllowedOrigins").Get<string[]>()!)
                .AllowAnyHeader()
                .AllowAnyMethod()
                .AllowCredentials();

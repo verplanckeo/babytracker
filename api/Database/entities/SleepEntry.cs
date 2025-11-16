@@ -10,6 +10,12 @@ public class SleepEntry
     [Required]
     public string UserId { get; set; } = string.Empty;
     
+    /// <summary>
+    /// Baby this sleep entry belongs to
+    /// </summary>
+    //[Required]
+    public string? BabyId { get; set; } = string.Empty;
+    
     [Required]
     public DateOnly Date { get; set; }
     
@@ -33,4 +39,7 @@ public class SleepEntry
     public DateTime Created { get; set; } = DateTime.UtcNow;
     
     public DateTime? UpdatedAt { get; set; }
+    
+    // Navigation properties
+    public virtual Baby Baby { get; set; } = null!;
 }

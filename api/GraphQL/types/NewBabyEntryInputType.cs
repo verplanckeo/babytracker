@@ -4,6 +4,7 @@ namespace BabyTracker.GraphQL.types;
 
 public class NewBabyEntryInputType
 {
+    public string BabyId { get; set; } = string.Empty; 
     public DateOnly Date { get; set; }
     public TimeOnly Time { get; set; }
     public FeedTypes FeedType { get; set; }

@@ -23,6 +23,6 @@ public class NewBabyEntry
 
         public bool DidThrowUp { get; set; }
     
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
 
 }

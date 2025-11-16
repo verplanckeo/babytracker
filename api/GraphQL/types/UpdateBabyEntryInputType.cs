@@ -4,6 +4,7 @@ namespace BabyTracker.GraphQL.types;
 
 public class UpdateBabyEntryInputType
 {
+    public string? BabyId { get; set; }
     public string? Date { get; set; }
     public string? Time { get; set; }
     public FeedTypes? FeedType { get; set; }
@@ -13,5 +14,5 @@ public class UpdateBabyEntryInputType
     public bool? DidPoo { get; set; }
     public bool? DidThrowUp { get; set; }
     
-    public string Comment { get; set; }
+    public string? Comment { get; set; }
 }
